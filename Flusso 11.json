@@ -1,0 +1,381 @@
+{
+  "name": "Flusso 11",
+  "nodes": [
+    {
+      "parameters": {
+        "inputText": "={{$json[\"motivazione\"]}}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        176
+      ],
+      "id": "2acde9ef-e73d-47c4-9e39-73e5623fea4c",
+      "name": "Sentiment Analysis"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "newfarm",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1024,
+        192
+      ],
+      "id": "36c77432-5406-4ca4-b98c-b4d03d212d91",
+      "name": "Webhook2",
+      "webhookId": "aee7bd25-8a86-4795-a242-43afceccb626"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    nome: item.json.body.data.data.nome,\n    cognome: item.json.body.data.data.Cognome,\n    email: item.json.body.data.data.Email,\n    budget: item.json.body.data.data.Budget,\n    nazione: item.json.body.data.data.Nazione,\n    motivazione: item.json.body.data.data.Motivazione\n  }\n}));\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -768,
+        192
+      ],
+      "id": "447ebb42-0af1-4171-840d-ac25292f2655",
+      "name": "Estrai payload2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96898ecf-98c2-4692-bef5-c2873d719410",
+              "name": "nome",
+              "value": "={{$json[\"nome\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "0bb11647-d4e4-4c11-a46a-74197e30a478",
+              "name": "cognome",
+              "value": "={{$json[\"cognome\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "4828a330-5d61-41a9-a8d3-db8220680ffb",
+              "name": "email",
+              "value": "={{$json[\"email\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "f845987c-8e31-4c46-8ef9-7401a2c0a092",
+              "name": "budget",
+              "value": "={{$json[\"budget\"]}}",
+              "type": "number"
+            },
+            {
+              "id": "efc53ef7-ee95-4dcd-ae48-fba22791e8c3",
+              "name": "motivazione",
+              "value": "={{$json[\"motivazione\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "11eff645-bc37-42de-a699-9d0efcafad02",
+      "name": "Prepara mail3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96898ecf-98c2-4692-bef5-c2873d719410",
+              "name": "nome",
+              "value": "={{$json[\"nome\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "0bb11647-d4e4-4c11-a46a-74197e30a478",
+              "name": "cognome",
+              "value": "={{$json[\"cognome\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "4828a330-5d61-41a9-a8d3-db8220680ffb",
+              "name": "email",
+              "value": "={{$json[\"email\"]}}",
+              "type": "string"
+            },
+            {
+              "id": "f845987c-8e31-4c46-8ef9-7401a2c0a092",
+              "name": "budget",
+              "value": "={{$json[\"budget\"]}}",
+              "type": "number"
+            },
+            {
+              "id": "efc53ef7-ee95-4dcd-ae48-fba22791e8c3",
+              "name": "motivazione",
+              "value": "={{$json[\"motivazione\"]}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        272
+      ],
+      "id": "bf7f00b7-2505-4260-be82-255f4625a1c7",
+      "name": "Prepara mail4"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"email\"]}}",
+        "subject": "Follow-up",
+        "message": "=Ciao {{$json[\"nome\"]}} {{$json[\"cognome\"]}},\t",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        272,
+        0
+      ],
+      "id": "a15c46e5-45a5-48d8-bb69-cc87924b4304",
+      "name": "Follow-up2",
+      "webhookId": "f5b995ae-795a-4fb5-936c-c4413aad61da",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CGksUiurAdsIZwDF",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"email\"]}}",
+        "subject": "Grazie per aver completato il sondaggio",
+        "message": "=Ciao {{$json[\"nome\"]}} {{$json[\"cognome\"]}},\t",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        272,
+        272
+      ],
+      "id": "9a8577bb-f97c-40f2-a1d0-0cb3a75a71b2",
+      "name": "Cortesia1",
+      "webhookId": "fc234fb2-b48f-4a88-9d68-dfa2fa042ca6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CGksUiurAdsIZwDF",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        416
+      ],
+      "id": "50003132-01b0-4da7-bcc2-d8e46ca2611b",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6xAGhA9zHQNia7ZG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook2": [
+      {
+        "json": {
+          "headers": {
+            "host": "ilenia3.app.n8n.cloud",
+            "user-agent": "node",
+            "content-length": "806",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "accept-language": "*",
+            "baggage": "sentry-environment=production,sentry-release=4.0.1,sentry-public_key=f04fb0e18badd6412c9671e4b59b27ab,sentry-trace_id=5e8b6d0cd7a24f589bc90e252a3c84cc,sentry-org_id=4504315602993152,sentry-sampled=false,sentry-sample_rand=0.41348741584736826,sentry-sample_rate=0",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "3.64.29.144",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "DE",
+            "cf-ray": "995c17f7f1a9fcd5-FRA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "sec-fetch-mode": "cors",
+            "sentry-trace": "5e8b6d0cd7a24f589bc90e252a3c84cc-09e02c2c74399697-0",
+            "x-forwarded-for": "3.64.29.144, 172.70.240.95",
+            "x-forwarded-host": "ilenia3.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-63-757945c69-pzvsj",
+            "x-is-trusted": "yes",
+            "x-real-ip": "3.64.29.144"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "webhookId": "cmhatt6t104hkad014hv3zcr5",
+            "event": "responseFinished",
+            "data": {
+              "id": "cmhaty8v12189ad01to2mxz5o",
+              "createdAt": "2025-10-28T17:17:58.237Z",
+              "updatedAt": "2025-10-28T17:18:38.958Z",
+              "surveyId": "cmh9tb20y30ajad01kp6mlbqe",
+              "displayId": "cmhalwj3z122uad017k0vka9x",
+              "contact": null,
+              "contactAttributes": null,
+              "finished": true,
+              "endingId": "trqmnpzew8u2c4cm1nwr9jvu",
+              "data": {
+                "nome": "Lollo",
+                "Email": "lollino@gmail",
+                "Budget": "560",
+                "Cognome": "Lacustre",
+                "Nazione": "Sopra",
+                "Motivazione": "Sono colorati"
+              },
+              "variables": {},
+              "ttc": {
+                "nome": 35242,
+                "Email": 9172,
+                "Budget": 5050,
+                "_total": 74686,
+                "Cognome": 5185,
+                "Nazione": 8015,
+                "Motivazione": 12022
+              },
+              "tags": [],
+              "meta": {
+                "url": "https://app.formbricks.com/s/cmh9tb20y30ajad01kp6mlbqe",
+                "userAgent": {
+                  "browser": "Firefox",
+                  "os": "Windows",
+                  "device": "desktop"
+                }
+              },
+              "singleUseId": null,
+              "language": null
+            }
+          },
+          "webhookUrl": "https://ilenia3.app.n8n.cloud/webhook/newfarm",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "Prepara mail3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepara mail4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepara mail4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Estrai payload2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Estrai payload2": {
+      "main": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara mail3": {
+      "main": [
+        [
+          {
+            "node": "Follow-up2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepara mail4": {
+      "main": [
+        [
+          {
+            "node": "Cortesia1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5c2c0eef-6837-40dc-8242-78432862c458",
+  "meta": {
+    "instanceId": "3eade08974c65ea0e714de990b1c4d4deb3f525e0d19f574aa90538cacfd42e4"
+  },
+  "id": "Ut7bvk81ZVJbgQEa",
+  "tags": []
+}
